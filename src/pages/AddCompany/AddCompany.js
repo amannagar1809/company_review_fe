@@ -18,26 +18,80 @@ export default function AddCompany() {
     formState: { errors, isSubmitting }
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
+  // const onSubmit = async (data) => {
+  //   try {
 
-      await createCompany(data);
+  //     await createCompany(data);
 
-      toast.success(
-        "Company Added Successfully"
-      );
+  //     toast.success(
+  //       "Company Added Successfully"
+  //     );
 
-      navigate("/");
+  //     navigate("/");
 
-    } catch (error) {
+  //   } catch (error) {
 
-      toast.error(
-        error.response?.data?.message ||
-        "Failed To Add Company"
-      );
+  //     toast.error(
+  //       error.response?.data?.message ||
+  //       "Failed To Add Company"
+  //     );
 
-    }
-  };
+  //   }
+  // };
+
+  const onSubmit = async (
+  data
+) => {
+
+  try {
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      "companyName",
+      data.companyName
+    );
+
+    formData.append(
+      "location",
+      data.location
+    );
+
+    formData.append(
+      "city",
+      data.city
+    );
+
+    formData.append(
+      "foundedOn",
+      data.foundedOn
+    );
+
+    formData.append(
+      "description",
+      data.description
+    );
+
+    formData.append(
+      "logo",
+      data.logo[0]
+    );
+
+    await createCompany(
+      formData
+    );
+
+    toast.success(
+      "Company Added Successfully"
+    );
+
+  } catch (error) {
+    toast.error(
+      "Failed To Add Company"
+    );
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
