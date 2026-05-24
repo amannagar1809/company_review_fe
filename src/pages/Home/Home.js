@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getCompanies } from "../../api/companyApi";
 import Navbar from "../../components/Navbar/Navbar";
 import CompanyCard from "../../components/CompanyCard/CompanyCard";
@@ -16,6 +16,7 @@ export default function Home() {
   const [search,setSearch] = useState("");
   const [city,setCity] = useState("");
   const [sort,setSort] = useState("name");
+  const [selectedCity, setSelectedCity] = useState();
   const debouncedSearch = useDebounce(search);
   const loadCompanies = async () => {
     try {
@@ -37,6 +38,10 @@ export default function Home() {
  }
   };
 
+  const cities = useMemo(() => {
+  return [...new Set(companies.map(c => c.city))];
+}, [companies]);
+
   useEffect(() => {
     loadCompanies();
   }, [ debouncedSearch, city, sort]);
@@ -49,20 +54,11 @@ export default function Home() {
         {/* Filter Section */}
          <div className="w-72">
 
-   <CityFilter
-     value={city}
-     onChange={(e)=>
-      setCity(
-       e.target.value
-      )
-     }
-     cities={[
-       "Indore",
-       "Delhi",
-       "Mumbai",
-       "Pune"
-     ]}
-   />
+<CityFilter
+  cities={cities}
+  value={selectedCity}
+  onChange={(e) => setSelectedCity(e.target.value)}
+/>
 
  </div>
         <div className="flex justify-between mb-10">
@@ -72,6 +68,8 @@ export default function Home() {
           />
 
           <button
+            onClick={loadCompanies}
+
    className="
    bg-gradient-to-r
    from-purple-600

@@ -20,6 +20,9 @@ export default function CompanyDetails() {
 
   const { id } = useParams();
 
+  const [showReviewForm, setShowReviewForm] =
+  useState(false);
+  
   const [company,setCompany] =
     useState(null);
 
@@ -29,11 +32,6 @@ export default function CompanyDetails() {
   const [sort,setSort] =
     useState("latest");
 
-const [search,setSearch] =
- useState("");
-
- const [openModal,setOpenModal] =
- useState(false);
 
   const loadData = async () => {
 
@@ -178,52 +176,39 @@ alt={company.companyName}
 
       {/* Add Review */}
 
-      <div
-        className="
-        bg-white
-        shadow
-        rounded-xl
-        p-6
-        mb-6
-        "
-      >
-
-        <h2
-          className="
-          text-xl
-          font-semibold
-          mb-4
-          "
-        >
-          Add Review
-        </h2>
-
-          <button
- onClick={() =>
-  setOpenModal(true)
- }
- className="
- bg-gradient-to-r
- from-purple-500
- to-blue-600
- text-white
- px-6
- py-3
- rounded-lg
- "
->
-
- Add Review
-
-</button>
-
-        <ReviewForm
-          companyId={id}
-          onSuccess={loadData}
-        />
-
-      </div>
-
+<div className="mb-6">
+  <button
+    onClick={() =>
+      setShowReviewForm(true)
+    }
+    className="
+      bg-gradient-to-r
+      from-purple-600
+      to-blue-600
+      text-white
+      px-6
+      py-3
+      rounded-lg
+      font-medium
+    "
+  >
+    Add Review
+  </button>
+  {
+  showReviewForm && (
+    <ReviewForm
+      companyId={id}
+      onSuccess={() => {
+        loadData();
+        setShowReviewForm(false);
+      }}
+      onCancel={() =>
+        setShowReviewForm(false)
+      }
+    />
+  )
+}
+</div>
       {/* Sort */}
 
       <div className="mb-5">
